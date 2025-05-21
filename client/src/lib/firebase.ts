@@ -2,11 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: `${import.meta.env.VITE_FIREBASE_PROJECT_ID}.appspot.com`,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    apiKey: "AIzaSyA8LSehhUnWMaa9V_2YrpXyClxpgkReY3A",
+  authDomain: "necxis-123.firebaseapp.com",
+  projectId: "necxis-123",
+  storageBucket: "necxis-123.firebasestorage.app",
+  messagingSenderId: "332242961406",
+  appId: "1:332242961406:web:d348d0284d1fa1885036af"
 };
 
 const app = initializeApp(firebaseConfig);

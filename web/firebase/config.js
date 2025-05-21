@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}.appspot.com`,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+    apiKey: "AIzaSyA8LSehhUnWMaa9V_2YrpXyClxpgkReY3A",
+  authDomain: "necxis-123.firebaseapp.com",
+  projectId: "necxis-123",
+  storageBucket: "necxis-123.firebasestorage.app",
+  messagingSenderId: "332242961406",
+  appId: "1:332242961406:web:d348d0284d1fa1885036af"
 };
 
 const app = initializeApp(firebaseConfig);
