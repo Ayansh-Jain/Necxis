@@ -125,7 +125,7 @@ export default function Home() {
     if (navigator.share && currentQuote) {
       navigator.share({
         title: 'QuoteSync - Daily Motivation',
-        text: `"${currentQuote}"`,
+        text: `"${currentQuote.text}" - ${currentQuote.author}`,
         url: window.location.href,
       }).catch(err => {
         console.error('Error sharing:', err);
