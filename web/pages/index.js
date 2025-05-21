@@ -7,11 +7,10 @@ import {
   Paper, 
   Button, 
   Box, 
-  Card, 
-  CardContent, 
   CircularProgress,
   Avatar
 } from '@mui/material';
+import QuoteCard from '../components/QuoteCard';
 import quotes from '../data/quotes.json';
 
 export default function Home() {
@@ -21,6 +20,15 @@ export default function Home() {
   const [previousQuotes, setPreviousQuotes] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
   const [timeOfDay, setTimeOfDay] = useState('');
+  const [fcmToken, setFcmToken] = useState(null);
+
+  useEffect(() => {
+    // Check if a token was passed from the mobile WebView
+    if (typeof window !== 'undefined' && window.FIREBASE_FCM_TOKEN) {
+      console.log('FCM Token received from mobile app:', window.FIREBASE_FCM_TOKEN);
+      setFcmToken(window.FIREBASE_FCM_TOKEN);
+    }
+  }, []);
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -141,21 +149,18 @@ export default function Home() {
           Current time: {currentTime}
         </Typography>
         
-        <Card sx={{ 
-          mt: 3, 
-          bgcolor: 'primary.main', 
-          color: 'white', 
-          borderRadius: 2 
-        }}>
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" component="div" gutterBottom>
-              "{currentQuote.text}"
-            </Typography>
-            <Typography variant="subtitle1" sx={{ mt: 2, textAlign: 'right' }}>
-              — {currentQuote.author}
-            </Typography>
-          </CardContent>
-        </Card>
+        {currentQuote && (
+          <QuoteCard 
+            quote={currentQuote} 
+            isHighlighted={true} 
+          />
+        )}
+        
+        {fcmToken && (
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 2 }}>
+            Connected to mobile app for notifications
+          </Typography>
+        )}
       </Paper>
 
       {previousQuotes.length > 0 && (
@@ -164,26 +169,11 @@ export default function Home() {
             Previous Quotes
           </Typography>
           {previousQuotes.map((item, index) => (
-            <Card key={index} sx={{ mb: 2, borderRadius: 2 }}>
-              <CardContent>
-                <Typography variant="body1" gutterBottom>
-                  "{item.quote.text}"
-                </Typography>
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  mt: 1 
-                }}>
-                  <Typography variant="caption" color="text.secondary">
-                    {item.time}
-                  </Typography>
-                  <Typography variant="body2">
-                    — {item.quote.author}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
+            <QuoteCard 
+              key={index} 
+              quote={item.quote} 
+              time={item.time} 
+            />
           ))}
         </Box>
       )}
