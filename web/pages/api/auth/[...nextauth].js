@@ -1,5 +1,5 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
 
 export default NextAuth({
   providers: [
@@ -9,17 +9,29 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/",
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
     async session({ session, token }) {
-      // Add custom session logic here if needed
+      // Send properties to the client, like an access_token from a provider
+      session.user.id = token.sub;
+      if (token.picture) {
+        session.user.image = token.picture;
+      }
       return session;
     },
     async jwt({ token, user, account }) {
-      // Add custom token logic here if needed
+      // Persist the OAuth access_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token;
+      }
       return token;
     },
+  },
+  pages: {
+    signIn: '/login',
+    error: '/login', // Error code passed in query string as ?error=
   },
 });
