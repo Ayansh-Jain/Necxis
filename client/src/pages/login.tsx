@@ -44,14 +44,42 @@ export default function Login() {
     
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        // When creating a new account
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          setLocation("/");
+        } catch (err: any) {
+          // Handle specific errors more gracefully
+          if (err.code === 'auth/email-already-in-use') {
+            setError("This email is already registered. Try signing in instead.");
+          } else if (err.code === 'auth/operation-not-allowed') {
+            setError("Email/password sign-up is not enabled. Please contact the administrator.");
+          } else if (err.code === 'auth/weak-password') {
+            setError("Password is too weak. Please use at least 6 characters.");
+          } else {
+            setError(err.message || "Failed to create account. Please try again.");
+          }
+          console.error("Sign up error:", err);
+        }
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        // When signing in
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          setLocation("/");
+        } catch (err: any) {
+          // Handle specific errors more gracefully
+          if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+            setError("Invalid email or password. Please try again.");
+          } else if (err.code === 'auth/too-many-requests') {
+            setError("Too many failed attempts. Please try again later.");
+          } else {
+            setError(err.message || "Failed to sign in. Please try again.");
+          }
+          console.error("Sign in error:", err);
+        }
       }
-      setLocation("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Auth error:", error);
-      // @ts-ignore
       setError(error.message || "Authentication failed. Please try again.");
     } finally {
       setIsLoading(false);
